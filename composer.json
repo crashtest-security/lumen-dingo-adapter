@@ -1,8 +1,8 @@
 {
-    "name": "crashtest-security/lumen-dingo-adapter",
+    "name": "crashtest/lumen-dingo-adapter",
     "description": "Using Dingo + JWT in your Lumen Based Application with no pain",
     "type": "library",
-    "version": 1.2,
+    "version": "1.2",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -28,5 +28,5 @@
         }
     ],
     "minimum-stability": "dev",
-    "prefer-dist": true
+    "prefer-stable": true
 }
