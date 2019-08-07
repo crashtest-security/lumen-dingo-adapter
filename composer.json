@@ -1,32 +1,37 @@
 {
-    "name": "crashtest-security/lumen-dingo-adapter",
-    "description": "Using Dingo + JWT in your Lumen Based Application with no pain",
-    "type": "library",
-    "version": "5.8.1",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Zeek\\LumenDingoAdapter\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+  "name": "crashtest-security/lumen-dingo-adapter",
+  "description": "Using Dingo + JWT in your Lumen Based Application with no pain",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Zeek\\LumenDingoAdapter\\": "src/"
     },
-    "require": {
-        "php": ">=7.1",
-        "illuminate/hashing": "^5.8",
-        "tymon/jwt-auth": "1.0.0-rc.4.1",
-        "illuminate/cookie": "^5.8",
-        "illuminate/routing": "^5.8",
-        "illuminate/http": "^5.8",
-        "dingo/api": "2.3.0"
-    },
-    "authors": [
-        {
-            "name": "Krisan Alfa Timur",
-            "email": "krisan47@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "require": {
+    "php": ">=7.1",
+    "illuminate/hashing": "^5.8",
+    "tymon/jwt-auth": "1.0.0-rc.4.1",
+    "illuminate/cookie": "^5.8",
+    "illuminate/routing": "^5.8",
+    "illuminate/http": "^5.8",
+    "dingo/api": "2.3.0"
+  },
+  "authors": [
+    {
+      "name": "Krisan Alfa Timur",
+      "email": "krisan47@gmail.com"
+    }
+  ],
+  "replace": {
+    "krisanalfa/lumen-dingo-adapter": "0.1.0",
+    "dolphiq/lumen-dingo-adapter": "1.1",
+    "tosinbot/lumen-dingo-adapter": "dev-master",
+    "durimjusaj/lumen-dingo-adapter": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
