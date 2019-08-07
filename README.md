@@ -1,5 +1,14 @@
-# Dingo Adapter for Lumen
+# Dingo Adapter for Lumen 5.8
 Using Dingo + JWT in your Lumen Based Application with no pain.
+
+All dependencies have been updated to work with Lumen 5.8
+
+| Tag  | Lumen Version |
+|------|---------------|
+| 5.8  | 5.8.*         |
+| 5.7  | 5.7.*         |
+| 1.1  | 5.4.*         |
+
 
 ### Installation
 
@@ -15,10 +24,11 @@ In your `bootstrap/app.php` file add this line:
 $app->register(Zeek\LumenDingoAdapter\Providers\LumenDingoAdapterServiceProvider::class);
 ```
 
-Below is environment variable you should configure to make this package works out of the box:
+Configure one of the following environment variables to make this package work out of the box:
 
 ```env
 API_PREFIX=api
+API_DOMAIN=api.example.com
 ```
 
 ### Guarding Your Routes via Dingo Routing
