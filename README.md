@@ -1,10 +1,11 @@
-# Dingo Adapter for Lumen 5.8
+# Dingo Adapter for Lumen 5.4 to 6.0
 Using Dingo + JWT in your Lumen Based Application with no pain.
 
-All dependencies have been updated to work with Lumen 5.8
+All dependencies have been updated to work with Lumen 6.0
 
 | Tag  | Lumen Version |
 |------|---------------|
+| 6.0  | 6.0.*         |
 | 5.8  | 5.8.*         |
 | 5.7  | 5.7.*         |
 | 1.1  | 5.4.*         |
