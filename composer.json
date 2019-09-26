@@ -15,15 +15,26 @@
     "php": ">=7.1",
     "illuminate/hashing": "^5.8",
     "tymon/jwt-auth": "1.0.0-rc.4.1",
+    "illuminate/cache": "^5.8",
     "illuminate/cookie": "^5.8",
     "illuminate/routing": "^5.8",
+    "illuminate/session": "^5.8",
     "illuminate/http": "^5.8",
     "dingo/api": "2.3.0"
+  },
+  "require-dev": {
+    "laravel/lumen-framework": "5.8.*"
   },
   "authors": [
     {
       "name": "Krisan Alfa Timur",
-      "email": "krisan47@gmail.com"
+      "email": "krisan47@gmail.com",
+      "role": "Initial Author"
+    },
+    {
+      "name": "Daniel Schosser",
+      "email": "daniel@crashtest-security.com",
+      "role": "Updates since Lumen 5.4"
     }
   ],
   "replace": {

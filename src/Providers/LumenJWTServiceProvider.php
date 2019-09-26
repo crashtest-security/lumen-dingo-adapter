@@ -2,26 +2,25 @@
 
 namespace Zeek\LumenDingoAdapter\Providers;
 
-use JWTAuth;
-use JWTFactory;
-use Illuminate\Http\Request;
-use Illuminate\Session\Store;
-use Illuminate\Cookie\CookieJar;
+use Closure;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Cache\CacheManager;
+use Illuminate\Cache\MemcachedConnector;
+use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
+use Illuminate\Cookie\CookieJar;
+use Illuminate\Http\Request;
+use Illuminate\Routing\ResponseFactory;
+use Illuminate\Session\SessionManager;
+use Illuminate\Session\SessionServiceProvider;
+use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Routing\ResponseFactory;
-use Illuminate\Cache\MemcachedConnector;
-use Tymon\JWTAuth\JWTAuth as TymonJWTAuth;
-use Tymon\JWTAuth\Middleware\RefreshToken;
-use Tymon\JWTAuth\Providers\JWT\JWTInterface;
-use Tymon\JWTAuth\Middleware\GetUserFromToken;
-use Illuminate\Session\SessionServiceProvider;
-use Tymon\JWTAuth\Providers\LumenServiceProvider;
+use JWTAuth;
+use JWTFactory;
 use Tymon\JWTAuth\Facades\JWTAuth as JWTAuthFacade;
 use Tymon\JWTAuth\Facades\JWTFactory as JWTFactoryFacade;
-use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
+use Tymon\JWTAuth\JWTAuth as TymonJWTAuth;
+use Tymon\JWTAuth\Providers\LumenServiceProvider;
 
 class LumenJWTServiceProvider extends ServiceProvider
 {
@@ -35,9 +34,6 @@ class LumenJWTServiceProvider extends ServiceProvider
 
         // JWT itself
         $this->registerJWTServiceProvider();
-
-        // Middleware route registration
-        $this->registerJwtAuthMiddleware();
     }
 
     /**
@@ -57,7 +53,7 @@ class LumenJWTServiceProvider extends ServiceProvider
 
         $this->registerAuthManagerAlias();
     }
-    
+
     protected function registerRequest()
     {
         $this->app->instance(Request::class, Request::capture());
@@ -237,8 +233,6 @@ class LumenJWTServiceProvider extends ServiceProvider
     protected function registerJwtAuth()
     {
         $this->registerBaseJWTAuth();
-
-        $this->registerJwtAuthProvider();
     }
 
     /**
@@ -249,17 +243,6 @@ class LumenJWTServiceProvider extends ServiceProvider
         $this->loadComponent(
             TymonJWTAuth::class,
             'JWTAuth'
-        );
-    }
-
-    /**
-     * Register JWTAuthProvider instance resolver.
-     */
-    protected function registerJwtAuthProvider()
-    {
-        $this->loadComponent(
-            JWTInterface::class,
-            'JWTAuthProvider'
         );
     }
 
@@ -275,22 +258,6 @@ class LumenJWTServiceProvider extends ServiceProvider
                 'jwt',
                 LumenServiceProvider::class,
                 TymonJWTAuth::class
-            );
-        };
-    }
-
-    /**
-     * Load JWT Auth component.
-     *
-     * @return Closure
-     */
-    protected function loadJWTAuthProviderComponent()
-    {
-        return function ($app) {
-            return $app->loadComponent(
-                'jwt',
-               LumenServiceProvider::class,
-                JWTInterface::class
             );
         };
     }
@@ -314,7 +281,7 @@ class LumenJWTServiceProvider extends ServiceProvider
     protected function shouldRegisterFacades()
     {
         return $this->isUsingFacade() === true
-            && $this->facadeHasNotBeenRegistered() === true;
+               && $this->facadeHasNotBeenRegistered() === true;
     }
 
     /**
@@ -338,21 +305,10 @@ class LumenJWTServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register JWTAuth middleware.
-     */
-    protected function registerJwtAuthMiddleware()
-    {
-        $this->app->routeMiddleware([
-            'jwt.auth' => GetUserFromToken::class,
-            'jwt.refresh' => RefreshToken::class,
-        ]);
-    }
-
-    /**
      * Load component by given bindings an name resolver.
      *
-     * @param array|string  $bindings
-     * @param string $name
+     * @param array|string $bindings
+     * @param string       $name
      */
     protected function loadComponent($bindings, $name)
     {
@@ -361,9 +317,10 @@ class LumenJWTServiceProvider extends ServiceProvider
                 $bindings,
                 $this->{"load{$name}Component"}()
             );
+
             return;
         }
-        $aliases = array_values($bindings);
+        $aliases   = array_values($bindings);
         $abstracts = array_keys($bindings);
 
         foreach ($abstracts as $index => $abstract) {

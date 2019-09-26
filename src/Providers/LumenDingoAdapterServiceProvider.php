@@ -2,8 +2,12 @@
 
 namespace Zeek\LumenDingoAdapter\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Dingo\Api\Provider\LumenServiceProvider;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Cookie\QueueingFactory;
+use Illuminate\Cookie\CookieServiceProvider;
+use Illuminate\Session\SessionServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class LumenDingoAdapterServiceProvider extends ServiceProvider
 {
@@ -11,8 +15,9 @@ class LumenDingoAdapterServiceProvider extends ServiceProvider
      * Boot the application services.
      *
      * @return void
+     * @throws BindingResolutionException
      */
-    public function boot ()
+    public function boot()
     {
 
         $this->configure('auth');
@@ -32,8 +37,6 @@ class LumenDingoAdapterServiceProvider extends ServiceProvider
         $this->registerIlluminateSession();
 
 
-
-
         // JWTAuth
         $this->app->register(LumenJWTServiceProvider::class);
 
@@ -49,22 +52,24 @@ class LumenDingoAdapterServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerIlluminateSession(){
+    protected function registerIlluminateSession()
+    {
         if (!isset($this->app['session.store'])) {
-            if(!$this->app['config']->has('session.driver')) {
+            if (!$this->app['config']->has('session.driver')) {
                 $this->app['config']->set('session.driver', 'file');
             }
-            $this->app->register(\Illuminate\Session\SessionServiceProvider::class);
+            $this->app->register(SessionServiceProvider::class);
         }
     }
+
     protected function registerCookieComponent()
     {
         $app = $this->app;
         $this->app->singleton('cookie', function () use ($app) {
-            return $app->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
+            return $app->loadComponent('session', CookieServiceProvider::class, 'cookie');
         });
 
-        $this->app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
+        $this->app->bind(QueueingFactory::class, 'cookie');
     }
 
     /**
@@ -73,10 +78,11 @@ class LumenDingoAdapterServiceProvider extends ServiceProvider
      * @param string $name
      *
      * @return void
+     * @throws BindingResolutionException
      */
     protected function configure($name)
     {
-        $path = $this->app->basePath("config/{$name}.php");
+        $path = sprintf('%s%s', $this->app->basePath(), "config/{$name}.php");
 
         if (!is_readable($path)) {
             $path = dirname(__DIR__) . "/config/{$name}.php";

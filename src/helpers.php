@@ -14,7 +14,7 @@ if (!function_exists('config_path')) {
      */
     function config_path($path = '')
     {
-        return app()->basePath().'/config'.($path ? '/'.$path : $path);
+        return app()->basePath() . '/config' . ($path ? '/' . $path : $path);
     }
 }
 
@@ -32,6 +32,6 @@ if (!function_exists('storage_path')) {
      */
     function storage_path($path = '')
     {
-        return app()->basePath().'/storage'.($path ? '/'.$path : $path);
+        return app()->basePath() . '/storage' . ($path ? '/' . $path : $path);
     }
 }
